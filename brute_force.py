@@ -10,16 +10,17 @@ custos = [
     [34, 52, 19, 13, 89]
 ]
 
-# Retorna o custo de uma aresta
-def getCustoAresta(aresta):
-	return custos[aresta[0]][aresta[1]]
-
 # Calcula o custo de uma permutacao
 def calcularCusto(permutacao):
+	if(len(permutacao) < 2):
+		return 0
 	acumulador = 0
-	for indice, vertice in permutacao:
-		if(vertice != len(permutacao)-1):
-			acumulador = acumulador + getCustoAresta((vertice, vertice))
+	indice1 = 0
+	indice2 = 1
+	while(indice2 < len(permutacao)):
+		acumulador = acumulador + custos[permutacao[indice1]][permutacao[indice2]]
+		indice1 = indice1+1
+		indice2 = indice2+1
 	return acumulador
 
 # Funcao principal
@@ -36,6 +37,7 @@ def main():
 	# Para cada permutacao
 	for permutacao in permutacoes:
 		custo = calcularCusto(permutacao)
+		#print(permutacao,custo)
 		if(custo <= menorCusto):
 			menorCusto = custo
 			melhorPermutacao = permutacao

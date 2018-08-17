@@ -10,7 +10,7 @@ custos = [
 ]
 
 # Vertice inicial
-verticeInicial = 3
+verticeInicial = 4
 
 # Caminho solucao
 caminho = []
