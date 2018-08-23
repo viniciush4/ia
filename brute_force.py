@@ -3,11 +3,11 @@ import itertools
 
 # Array de custos
 custos = [
-    [18, 12, 60, 44, 95],
-    [45, 25, 76, 74, 32],
-    [70, 18, 98, 10, 55],
-    [30, 25, 42, 15, 64],
-    [34, 52, 19, 13, 89]
+    [1, 1, 7, 8, 2],
+    [1, 1, 5, 5, 6],
+    [7, 5, 1, 2, 9],
+    [8, 5, 2, 1, 7],
+    [2, 6, 9, 7, 1]
 ]
 
 # Calcula o custo de uma permutacao
@@ -23,6 +23,16 @@ def calcularCusto(permutacao):
 		indice2 = indice2+1
 	return acumulador
 
+# Calcula o custo de um caminho (implementacao do Lucas)
+def calcularCustoCaminho(P,M):
+	s=0 #acumulador
+	c_ant=P[0]
+	for c in P[1:]:
+		s+=M[c_ant][c]
+		c_ant=c
+	s+=M[P[-1]][P[0]]
+	return s
+
 # Funcao principal
 def main():
 	# Lista de vertices
@@ -36,7 +46,7 @@ def main():
 
 	# Para cada permutacao
 	for permutacao in permutacoes:
-		custo = calcularCusto(permutacao)
+		custo = calcularCustoCaminho(permutacao, custos)
 		#print(permutacao,custo)
 		if(custo <= menorCusto):
 			menorCusto = custo
