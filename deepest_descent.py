@@ -10,19 +10,6 @@ custos = [
     [2, 6, 9, 7, 1]
 ]
 
-# Calcula o custo de uma permutacao
-def calcularCusto(permutacao):
-	if(len(permutacao) < 2):
-		return 0
-	acumulador = 0
-	indice1 = 0
-	indice2 = 1
-	while(indice2 < len(permutacao)):
-		acumulador = acumulador + custos[permutacao[indice1]][permutacao[indice2]]
-		indice1 = indice1+1
-		indice2 = indice2+1
-	return acumulador
-
 # Calcula o custo de um caminho (implementacao do Lucas)
 def calcularCustoCaminho(P,M):
 	s=0 #acumulador
@@ -33,30 +20,44 @@ def calcularCustoCaminho(P,M):
 	s+=M[P[-1]][P[0]]
 	return s
 
+# Troca dois elementos em uma lista
 def troca(caminho, indice1, indice2):
-	aux = valor
-	caminho[indice1] = caminho[indice2]
-	caminho[indice2] = aux
+	c = caminho[:]
+	aux = c[indice1]
+	c[indice1] = c[indice2]
+	c[indice2] = aux
+	return c
 
+# Gera todos os vizinhos de um caminho
 def gerarVizinhanca(caminho):
+	c = caminho[:]
 	vizinhanca = []
-	for indice, valor in enumerate(caminho[1:]):
-		for indice2, valor2 in enumerate(caminho[1:]):
-			aux = valor
-			caminho[indice] = valor2
-			caminho[indice2] = aux
-			vizinhanca.append(caminho)
-			caminho[indice2] = aux
-			
+	for indice, valor in enumerate(c[1:]):
+		for indice2, valor2 in enumerate(c[1:]):
+			vizinho = troca(c, indice+1, indice2+1)
+			if(indice != indice2 and vizinho not in vizinhanca):
+				vizinhanca.append(vizinho)
+	return vizinhanca
+
+# Escolhe o melhor vizinho, dada uma vizinhanca
+def escolherVizinho(vizinhanca, custos):
+	melhorVizinho = []
+	melhorCustoVizinho = sys.maxint
+	for vizinho in vizinhanca:
+		custoVizinho = calcularCustoCaminho(vizinho, custos)
+		if(custoVizinho <= melhorCustoVizinho):
+			melhorVizinho = vizinho
+			melhorCustoVizinho = custoVizinho
+	return melhorVizinho
 
 # Funcao principal
 def main():
 	caminho = range(0, len(custos))
 	custoCaminho = calcularCustoCaminho(caminho, custos)
-	
+
 	while 1:
 		vizinhanca = gerarVizinhanca(caminho)
-		vizinho = escolherVizinho(vizinhanca)
+		vizinho = escolherVizinho(vizinhanca, custos)
 		custoVizinho = calcularCustoCaminho(vizinho, custos)
 		if(custoVizinho <= custoCaminho):
 			caminho = vizinho
